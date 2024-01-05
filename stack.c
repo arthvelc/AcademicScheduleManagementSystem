@@ -105,6 +105,32 @@ int authenticateUser(User* users, const char* username, const char* password, ch
     return 0; // Autenticación fallida
 }
 
+
+Schedule* findSchedule(ScheduleList* list, const char* className) {
+    Schedule* current = list->head;
+    while (current != NULL) {
+        if (strcmp(current->className, className) == 0) {
+            return current;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
+int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule) {
+    Schedule* current = studentSchedule->head;
+    while (current != NULL) {
+        if (strcmp(current->startTime, newSchedule->startTime) < 0 && strcmp(newSchedule->startTime, current->endTime) < 0) {
+            return 1; // Traslape encontrado
+        }
+        if (strcmp(current->startTime, newSchedule->endTime) < 0 && strcmp(newSchedule->endTime, current->endTime) < 0) {
+            return 1; // Traslape encontrado
+        }
+        current = current->next;
+    }
+    return 0; // No hay traslape
+}
+
 //----------------------------------------------------------
 void showMenu(){
     printf("\nMenu de Administrador:\n");
@@ -122,4 +148,10 @@ void clearScreen() {
     #else
         system("clear");
     #endif
+}
+
+void showMenuStudent(){
+    printf("\nMenu de Estudiante:\n");
+    printf("1. Armar horario de clases\n");
+    printf("2. Salir\n");
 }
