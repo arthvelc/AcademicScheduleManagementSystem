@@ -107,7 +107,6 @@ int main() {
         else if (authenticateUser(&studentUser, username, password, userType)) {
             while (1) {
                 showMenuStudent();
-
                 int choice;
                 printf("Seleccione una opción: ");
                 scanf("%d", &choice);
@@ -117,31 +116,15 @@ int main() {
                         clearScreen();
                         printf("Oferta de Horarios Disponibles:\n");
                         displaySchedules(&group1);  // Muestra la oferta de horarios
-
-                        char selectedClassName[50], selectedStartTime[6], selectedEndTime[6], selectedProfessor[50];
-                        printf("\nIngrese el nombre de la clase que desea agregar a su horario: ");
-                        scanf(" %[^\n]", selectedClassName);
-
-                        // Buscamos la clase seleccionada en la oferta
-                        Schedule* selectedSchedule = findSchedule(&group1, selectedClassName);
-
-                        if (selectedSchedule != NULL) {
-                            // Verificamos si hay traslape con otras clases ya seleccionadas
-                            if (!hasOverlap(&studentSchedule, selectedSchedule)) {
-                                // Agregamos la clase al horario del estudiante
-                                addSchedule(&studentSchedule, selectedSchedule->className, selectedSchedule->startTime, selectedSchedule->endTime, selectedSchedule->professor);
-                                printf("\nClase agregada exitosamente a su horario.\n");
-                            } else {
-                                printf("\nError: La clase seleccionada se traslapa con otra clase en su horario.\n");
-                            }
-                        } else {
-                            printf("\nError: Clase no encontrada en la oferta.\n");
-                        }
-
+                        addCourseToStudentSchedule(&group1, &studentSchedule);
                         break;
-
                     case 2:
                         // Salir del menú de estudiante
+                        clearScreen();
+                        displaySchedules(&studentSchedule); 
+                        break;
+                    case 3:
+                        // Cierra la sedsión
                         clearScreen();
                         break;
                     default:

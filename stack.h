@@ -27,6 +27,7 @@ void deleteSchedule(ScheduleList* list, const char* className, const char* start
 void displaySchedules(ScheduleList* list);
 Schedule* findSchedule(ScheduleList* list, const char* className);
 int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule);
+void addCourseToStudentSchedule(ScheduleList* courseOffering, ScheduleList* studentSchedule);
 
 // Funciones de autenticacion de usuarios y añadir usuarios
 void addUser(User* users, const char* username, const char* password, const char* fullName, const char* userType);

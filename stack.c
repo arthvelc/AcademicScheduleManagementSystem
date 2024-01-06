@@ -128,7 +128,29 @@ int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule) {
         }
         current = current->next;
     }
-    return 0; // No hay traslape
+    return 0; //tengo que corregir la lógica de esta función que no está funcionando
+}
+
+void addCourseToStudentSchedule(ScheduleList* courseOffering, ScheduleList* studentSchedule) {
+    char selectedClassName[50];
+    printf("\nIngrese el nombre de la clase que desea agregar a su horario: ");
+    scanf(" %[^\n]", selectedClassName);
+
+    // Find the selected course in the offering
+    Schedule* selectedSchedule = findSchedule(courseOffering, selectedClassName);
+
+    if (selectedSchedule != NULL) {
+        // Check for overlap with other already selected courses
+        if (!hasOverlap(studentSchedule, selectedSchedule)) {
+            // Add the course to the student's schedule
+            addSchedule(studentSchedule, selectedSchedule->className, selectedSchedule->startTime, selectedSchedule->endTime, selectedSchedule->professor);
+            printf("\nClase agregada Exitosamente.\n");
+        } else {
+            printf("\nError: La clase seleccionada traslapa con otra clase en su horario\n");
+        }
+    } else {
+        printf("\nError: Clase no encontrada en la oferta.\n");
+    }
 }
 
 //----------------------------------------------------------
@@ -138,7 +160,7 @@ void showMenu(){
     printf("2. Modificar un horario\n");
     printf("3. Eliminar un horario\n");
     printf("4. Consultar horarios\n");
-    printf("5. Salir\n");
+    printf("5. Cerrar sesión y salir\n");
 }
 
 void clearScreen() {
@@ -153,5 +175,6 @@ void clearScreen() {
 void showMenuStudent(){
     printf("\nMenu de Estudiante:\n");
     printf("1. Armar horario de clases\n");
-    printf("2. Salir\n");
+    printf("2. Mostrar horario\n");
+    printf("3. Cerrar sesión y salir.");
 }
