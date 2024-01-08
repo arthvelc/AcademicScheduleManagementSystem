@@ -120,10 +120,7 @@ Schedule* findSchedule(ScheduleList* list, const char* className) {
 int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule) {
     Schedule* current = studentSchedule->head;
     while (current != NULL) {
-        if (strcmp(current->startTime, newSchedule->startTime) < 0 && strcmp(newSchedule->startTime, current->endTime) < 0) {
-            return 1; // Traslape encontrado
-        }
-        if (strcmp(current->startTime, newSchedule->endTime) < 0 && strcmp(newSchedule->endTime, current->endTime) < 0) {
+        if (strcmp(current->startTime, newSchedule->startTime) == 0) {
             return 1; // Traslape encontrado
         }
         current = current->next;
@@ -176,5 +173,6 @@ void showMenuStudent(){
     printf("\nMenu de Estudiante:\n");
     printf("1. Armar horario de clases\n");
     printf("2. Mostrar horario\n");
-    printf("3. Cerrar sesión y salir.");
+    printf("3. Eliminar una materia del horario\n");
+    printf("4. Cerrar sesión y salir.\n");
 }

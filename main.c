@@ -19,6 +19,8 @@ int main() {
     initializeScheduleList(&group5);
     initializeScheduleList(&studentSchedule);
 
+    // En esta parte del código lo que haré es añadir automáticamente los horarios con arrays dinámicos
+
     while (1) {
         char username[20], password[20], userType[20];
         //Pedimos usuario y contraseña
@@ -124,6 +126,17 @@ int main() {
                         displaySchedules(&studentSchedule); 
                         break;
                     case 3:
+                        char classNam[50], startTim[6];
+                        printf("Ingrese el nombre de la clase que desea eliminar: ");
+                        scanf("%s", classNam);
+                        printf("Ingrese la hora de inicio del horario que desea eliminar (HH:MM): ");
+                        scanf("%s", startTim);
+                    
+                        // Lógica para eliminar horario
+                        deleteSchedule(&studentSchedule, classNam, startTim);
+                        clearScreen();
+                        break;
+                    case 4:
                         // Cierra la sedsión
                         clearScreen();
                         break;
