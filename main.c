@@ -1,6 +1,7 @@
 #include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 int main() {
     // Agregamos los usuarios que estarán durante la ejecución del programa
@@ -10,19 +11,32 @@ int main() {
     User studentUser;
     addUser(&studentUser, "student", "studentpass", "Student Name", "Student");
 
-    ScheduleList group1, group2, group3, group4, group5, studentSchedule;
+    ScheduleList group1,studentSchedule;
     // inicializamos la estructura que conendrán los 5 grupos de datos
     initializeScheduleList(&group1);
-    initializeScheduleList(&group2);
-    initializeScheduleList(&group3);
-    initializeScheduleList(&group4);
-    initializeScheduleList(&group5);
     initializeScheduleList(&studentSchedule);
 
-    // En esta parte del código lo que haré es añadir automáticamente los horarios con arrays dinámicos
+    // En esta parte del código lo que haré es añadir automáticamente.
+
+    loadInitialSchedules(&group1);
+    loadInitialSchedules(&group1);
+    loadInitialSchedules(&group1);
+    clearScreen();
+    printf("\n");
+    clearScreen();
 
     while (1) {
         char username[20], password[20], userType[20];
+        
+        printf(
+        "************************************\n"
+        "*                                  *\n"
+        "*        Bienvenido                *\n"
+        "*   Sistema de Gestión de Horarios *\n"
+        "*                                  *\n"
+        "************************************\n"
+        );
+        
         //Pedimos usuario y contraseña
         printf("Ingrese su nombre de usuario: ");
         scanf("%s", username);
@@ -93,7 +107,6 @@ int main() {
                         break;
                     case 5:
                         // Salir del menú de administrador
-                        fflush(stdout);
                         clearScreen();
                         break;
                     default:
@@ -121,8 +134,6 @@ int main() {
                         addCourseToStudentSchedule(&group1, &studentSchedule);
                         break;
                     case 2:
-                        // Salir del menú de estudiante
-                        clearScreen();
                         displaySchedules(&studentSchedule); 
                         break;
                     case 3:
@@ -143,7 +154,7 @@ int main() {
                     default:
                         printf("Opción no válida. Inténtelo de nuevo.\n");
                 }
-                if (choice == 2) {
+                if (choice == 4) {
                     break;
                 }
             }

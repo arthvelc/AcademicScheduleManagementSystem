@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 //Inicializa la estructura del horario
 void initializeScheduleList(ScheduleList* list) {
@@ -78,7 +79,7 @@ void displaySchedules(ScheduleList* list) {
     Schedule* current = list->head;
 
     printf("\n+-----------------------------------------------------------------------+\n");
-    printf("| Clase                             | Inicio   | Fin      | Profesor           |\n");
+    printf("| Clase                         | Inicio   | Fin      | Profesor           |\n");
     printf("+---------------------+----------+----------+-----------------------------+\n");
 
     while (current != NULL) {
@@ -176,3 +177,29 @@ void showMenuStudent(){
     printf("3. Eliminar una materia del horario\n");
     printf("4. Cerrar sesión y salir.\n");
 }
+
+void loadInitialSchedules(ScheduleList* list) {
+    char classNames[][50] = {"ALGEBRA LINEAL", "CALCULO A", "ALGORITMOS", "ECONOMIA", "MECANICA"};
+    char professors[][50] = {"Pepe", "Juan", "Maria", "Luis", "Ana"};
+
+    srand(time(NULL)); // Inicializar semilla para generar nombres de profesores aleatorios
+
+    for (int i = 0; i < 5; i++) {
+        // Generar nombre de profesor aleatorio
+        int randomIndex = rand() % 3; // Número aleatorio entre 0 y 2
+        char randomProfessor[50];
+        sprintf(randomProfessor, "%s", professors[randomIndex]);
+
+        // Generar horas aleatorias
+        int randomStartTimeHour = rand() % 6 + 15; // Número aleatorio entre 15 y 20
+        int randomEndTimeHour = rand() % 3 + randomStartTimeHour + 1; // Número aleatorio entre 1 y 3 horas más que la hora de inicio
+
+        char startTime[6], endTime[6];
+        sprintf(startTime, "%02d:00", randomStartTimeHour);
+        sprintf(endTime, "%02d:30", randomEndTimeHour);
+
+        // Agregar horario
+        addSchedule(list, classNames[i], startTime, endTime, randomProfessor);
+    }
+}
+

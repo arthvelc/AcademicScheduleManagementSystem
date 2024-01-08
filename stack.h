@@ -38,4 +38,6 @@ void showMenu();
 void clearScreen();
 void showMenuStudent();
 
+void loadInitialSchedules(ScheduleList* list);
+
 #endif
