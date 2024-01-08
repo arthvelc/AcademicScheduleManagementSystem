@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "listsimple.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,7 +9,7 @@ void initializeScheduleList(ScheduleList* list) {
     list->head = NULL;
 }
 
-void addSchedule(ScheduleList* list, const char* className, const char* startTime, const char* endTime, const char* professor) {
+void addSchedule(ScheduleList* list, const char* className, const char* startTime, const char* endTime, const char* professor, const char* group) {
     Schedule* newSchedule = (Schedule*)malloc(sizeof(Schedule));
     if (!newSchedule) {
         fprintf(stderr, "Error: No se pudo asignar memoria :c\n");
@@ -19,6 +19,7 @@ void addSchedule(ScheduleList* list, const char* className, const char* startTim
     strcpy(newSchedule->startTime, startTime);
     strcpy(newSchedule->endTime, endTime);
     strcpy(newSchedule->professor, professor);
+    strcpy(newSchedule->group, group);
     newSchedule->next = list->head;
 
     list->head = newSchedule;
@@ -26,7 +27,7 @@ void addSchedule(ScheduleList* list, const char* className, const char* startTim
 }
 
 void modifySchedule(ScheduleList* list, const char* className, const char* startTime) {
-    char newClassName[50], newStartTime[6], newEndTime[6], newProfessor[50];
+    char newClassName[50], newStartTime[6], newEndTime[6], newProfessor[50], newGroup[6];
     Schedule* current = list->head;
 
     while (current != NULL) {
@@ -39,10 +40,13 @@ void modifySchedule(ScheduleList* list, const char* className, const char* start
             scanf(" %[^\n]", newEndTime);
             printf("Ingrese el nuevo nombre del profesor: ");
             scanf(" %[^\n]", newProfessor);
+            printf("Ingrese el nuevo número del grupo (2CVX): ");
+            scanf(" %[^\n]", newGroup);
             strcpy(current->className, newClassName);
             strcpy(current->startTime, newStartTime);
             strcpy(current->endTime, newEndTime);
             strcpy(current->professor, newProfessor);
+            strcpy(current->group, newGroup);
             printf("El horario se ha modificado exitosamente :)\n");
             return;
         }
@@ -78,12 +82,12 @@ void deleteSchedule(ScheduleList* list, const char* className, const char* start
 void displaySchedules(ScheduleList* list) {
     Schedule* current = list->head;
 
-    printf("\n+-----------------------------------------------------------------------+\n");
-    printf("| Clase                         | Inicio   | Fin      | Profesor           |\n");
-    printf("+---------------------+----------+----------+-----------------------------+\n");
+    printf("\n+-------------------------------------------------------------------+\n");
+    printf("| Clase               | Inicio   | Fin      | Profesor    | Grupo   |\n");
+    printf("+---------------------+----------+----------+-------------+---------+\n");
 
     while (current != NULL) {
-        printf("| %-20s | %-8s | %-8s | %-20s |\n", current->className, current->startTime, current->endTime, current->professor);
+        printf("| %-19s | %-8s | %-8s | %-20s | %-15s |\n", current->className, current->startTime, current->endTime, current->professor, current->group);
         current = current->next;
     }
 
@@ -107,15 +111,16 @@ int authenticateUser(User* users, const char* username, const char* password, ch
 }
 
 
-Schedule* findSchedule(ScheduleList* list, const char* className) {
+Schedule* findSchedule(ScheduleList* list, const char* className, const char* selectedHour) {
     Schedule* current = list->head;
     while (current != NULL) {
-        if (strcmp(current->className, className) == 0) {
+        // Comparar tanto el nombre de la materia como la hora de inicio
+        if (strcmp(current->className, className) == 0 && strcmp(current->startTime, selectedHour) == 0) {
             return current;
         }
         current = current->next;
     }
-    return NULL;
+    return NULL;  // Si no se encuentra, devolver NULL
 }
 
 int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule) {
@@ -130,26 +135,29 @@ int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule) {
 }
 
 void addCourseToStudentSchedule(ScheduleList* courseOffering, ScheduleList* studentSchedule) {
-    char selectedClassName[50];
+    char selectedClassName[50], selectedHour[6];
     printf("\nIngrese el nombre de la clase que desea agregar a su horario: ");
     scanf(" %[^\n]", selectedClassName);
+    printf("\nSeleccione la hora de inicio de la clase (HH:MM): ");
+    scanf(" %5s", selectedHour);
 
     // Find the selected course in the offering
-    Schedule* selectedSchedule = findSchedule(courseOffering, selectedClassName);
+    Schedule* selectedSchedule = findSchedule(courseOffering, selectedClassName, selectedHour);
 
     if (selectedSchedule != NULL) {
         // Check for overlap with other already selected courses
-        if (!hasOverlap(studentSchedule, selectedSchedule)) {
+        if (!hasOverlap(studentSchedule, selectedSchedule)){
             // Add the course to the student's schedule
-            addSchedule(studentSchedule, selectedSchedule->className, selectedSchedule->startTime, selectedSchedule->endTime, selectedSchedule->professor);
-            printf("\nClase agregada Exitosamente.\n");
+            addSchedule(studentSchedule, selectedSchedule->className, selectedSchedule->startTime, selectedSchedule->endTime, selectedSchedule->professor, selectedSchedule->group);
+            printf("\nClase agregada exitosamente.\n");
         } else {
-            printf("\nError: La clase seleccionada traslapa con otra clase en su horario\n");
+            printf("\nError: La clase seleccionada traslapa con otra clase en su horario.\n");
         }
     } else {
         printf("\nError: Clase no encontrada en la oferta.\n");
     }
 }
+
 
 //----------------------------------------------------------
 void showMenu(){
@@ -179,17 +187,12 @@ void showMenuStudent(){
 }
 
 void loadInitialSchedules(ScheduleList* list) {
-    char classNames[][50] = {"ALGEBRA LINEAL", "CALCULO A", "ALGORITMOS", "ECONOMIA", "MECANICA"};
-    char professors[][50] = {"Pepe", "Juan", "Maria", "Luis", "Ana"};
-
-    srand(time(NULL)); // Inicializar semilla para generar nombres de profesores aleatorios
-
+    char classNames[][50] = {"ALGEBRA LINEAL", "CALCULO APLICADO", "ALGORITMOS", "ECONOMIA", "MECANICA"};
+    char professors[][50] = {"Pepe", "Juan", "Maria", "Daniel", "Rosa"};
+    char group[][6] = {"2CV5", "2CV3", "2CV1", "2CV4", "2CV2"};
+    
+    // Agregar horarios a la lista
     for (int i = 0; i < 5; i++) {
-        // Generar nombre de profesor aleatorio
-        int randomIndex = rand() % 3; // Número aleatorio entre 0 y 2
-        char randomProfessor[50];
-        sprintf(randomProfessor, "%s", professors[randomIndex]);
-
         // Generar horas aleatorias
         int randomStartTimeHour = rand() % 6 + 15; // Número aleatorio entre 15 y 20
         int randomEndTimeHour = rand() % 3 + randomStartTimeHour + 1; // Número aleatorio entre 1 y 3 horas más que la hora de inicio
@@ -199,7 +202,6 @@ void loadInitialSchedules(ScheduleList* list) {
         sprintf(endTime, "%02d:30", randomEndTimeHour);
 
         // Agregar horario
-        addSchedule(list, classNames[i], startTime, endTime, randomProfessor);
+        addSchedule(list, classNames[i], startTime, endTime, professors[i], group[i]);
     }
 }
-

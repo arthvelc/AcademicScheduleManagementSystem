@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "listsimple.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -31,8 +31,8 @@ int main() {
         printf(
         "************************************\n"
         "*                                  *\n"
-        "*        Bienvenido                *\n"
-        "*   Sistema de Gestión de Horarios *\n"
+        "*            Bienvenido            *\n"
+        "*  Sistema de Gestión de Horarios  *\n"
         "*                                  *\n"
         "************************************\n"
         );
@@ -56,7 +56,7 @@ int main() {
                 switch (choice) {
                     //Agregar un horario
                     case 1: {
-                        char className[50], startTime[6], endTime[6], professor[50];
+                        char className[50], startTime[6], endTime[6], professor[50], group[6];
                         printf("Ingrese el nombre de la clase: ");
                         scanf(" %[^\n]", className);  // %[^...] para leer hasta el salto de línea
                         printf("Ingrese la hora de inicio (HH:MM): ");
@@ -65,9 +65,11 @@ int main() {
                         scanf(" %5s", endTime);
                         printf("Ingrese el nombre del profesor: ");
                         scanf(" %[^\n]", professor);
+                        printf("Ingrese el número del grupo: ");
+                        scanf(" %[^\n]", group);
 
                         // Lógica para agregar horario
-                        addSchedule(&group1, className, startTime, endTime, professor);
+                        addSchedule(&group1, className, startTime, endTime, professor, group);
                         clearScreen();
                         break;
                     }

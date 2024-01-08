@@ -1,11 +1,12 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef LISTSIMPLE_H
+#define LISTSIMPLE_H
 
 typedef struct Schedule{
     char className[50];
     char startTime[6];
     char endTime[6];
     char professor[50];
+    char group[6];
     struct Schedule* next;
 } Schedule;
 
@@ -21,11 +22,11 @@ typedef struct User {
 } User;
 // Funciiones usando listas simples para la operación del programa
 void initializeScheduleList(ScheduleList* list);
-void addSchedule(ScheduleList* list, const char* className, const char* startTime, const char* endTime, const char* professor);
+void addSchedule(ScheduleList* list, const char* className, const char* startTime, const char* endTime, const char* professor, const char* group);
 void modifySchedule(ScheduleList* list, const char* className, const char* startTime);
 void deleteSchedule(ScheduleList* list, const char* className, const char* startTime);
 void displaySchedules(ScheduleList* list);
-Schedule* findSchedule(ScheduleList* list, const char* className);
+Schedule* findSchedule(ScheduleList* list, const char* className, const char* selectedHour);
 int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule);
 void addCourseToStudentSchedule(ScheduleList* courseOffering, ScheduleList* studentSchedule);
 
