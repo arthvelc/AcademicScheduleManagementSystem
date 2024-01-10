@@ -23,11 +23,12 @@ typedef struct User {
 // Funciiones usando listas simples para la operación del programa
 void initializeScheduleList(ScheduleList* list);
 void addSchedule(ScheduleList* list, const char* className, const char* startTime, const char* endTime, const char* professor, const char* group);
-void modifySchedule(ScheduleList* list, const char* className, const char* startTime);
-void deleteSchedule(ScheduleList* list, const char* className, const char* startTime);
+void modifySchedule(ScheduleList* list, const char* className, const char* group);
+void deleteSchedule(ScheduleList* list, const char* className, const char* group);
 void displaySchedules(ScheduleList* list);
-Schedule* findSchedule(ScheduleList* list, const char* className, const char* selectedHour);
+Schedule* findSchedule(ScheduleList* list, const char* className);
 int hasOverlap(ScheduleList* studentSchedule, Schedule* newSchedule);
+int hasOverlapShedule(ScheduleList* adminSchedule, const char* className, const char* startTime, const char* group);
 void addCourseToStudentSchedule(ScheduleList* courseOffering, ScheduleList* studentSchedule);
 
 // Funciones de autenticacion de usuarios y añadir usuarios

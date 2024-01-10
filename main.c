@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-int main() {
+int main(){
     // Agregamos los usuarios que estarán durante la ejecución del programa
     User adminUser;
     addUser(&adminUser, "admin", "adminpass", "Administrator", "Admin");
@@ -18,8 +18,6 @@ int main() {
 
     // En esta parte del código lo que haré es añadir automáticamente.
 
-    loadInitialSchedules(&group1);
-    loadInitialSchedules(&group1);
     loadInitialSchedules(&group1);
     clearScreen();
     printf("\n");
@@ -69,37 +67,41 @@ int main() {
                         scanf(" %[^\n]", group);
 
                         // Lógica para agregar horario
-                        addSchedule(&group1, className, startTime, endTime, professor, group);
-                        clearScreen();
+                        if (!hasOverlapShedule(&group1, className, startTime, group)) {
+                            addSchedule(&group1, className, startTime, endTime, professor, group);
+                            printf("\nDatos agregados exitosamente.\n");
+                        } else {
+                            printf("\nError: La materia con la misma hora de inicio y grupo ya existe en la lista.\n");
+                        }
                         break;
                     }
                     //Modificar horario
                     case 2: {
-                        char oldClassName[50], oldStartTime[6];
+                        char oldClassName[50], oldGroup[6];
 
                         printf("Ingrese el nombre de la clase que desea modificar: ");
                         scanf(" %[^\n]", oldClassName);
-                        printf("Ingrese la hora de inicio del horario que desea modificar (HH:MM): ");
-                        scanf(" %[^\n]", oldStartTime);
+                        printf("Ingrese el grupo de clases que desea modificar (2CVX): ");
+                        scanf(" %[^\n]", oldGroup);
 
                         clearScreen();
                         printf("Digite los nuevos datos \n\n");
 
                         // Lógica para modificar horario
-                        modifySchedule(&group1, oldClassName, oldStartTime);
+                        modifySchedule(&group1, oldClassName, oldGroup);
 
                         clearScreen();
                         break;
                     }
                     case 3: {
-                        char className[50], startTime[6];
+                        char className[50], group[6];
                         printf("Ingrese el nombre de la clase que desea eliminar: ");
                         scanf("%s", className);
-                        printf("Ingrese la hora de inicio del horario que desea eliminar (HH:MM): ");
-                        scanf("%s", startTime);
+                        printf("Ingrese el grupo de clases que desea eliminar (2CVX): ");
+                        scanf("%s", group);
 
                         // Lógica para eliminar horario
-                        deleteSchedule(&group1, className, startTime);
+                        deleteSchedule(&group1, className, group);
                         clearScreen();
                         break;
                     }
